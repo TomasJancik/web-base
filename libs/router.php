@@ -31,20 +31,20 @@ class router {
 		$uri = ltrim($uri, '/');
 		$idx = strpos($uri, '?');
 		
-		if(false != $idx) {
+		if($idx) {
 			$get = explode('&', substr($uri, $idx+1));
 			$uri = substr($uri, 0, $idx);
+		
+			foreach($get as $param) {
+				$idx = strpos($param, '=');
+				$this->get[substr($param, 0, $idx)] = substr($param, $idx+1);
+			}
 		}
 		
 		$uri = explode('/', $uri);
 		$this->controller = $uri[0] ?: 'home';
 		$this->method = $uri[1] ?: 'index';
 		$ex = array_slice($uri, 2);
-		
-		foreach($get as $param) {
-			$idx = strpos($param, '=');
-			$this->get[substr($param, 0, $idx)] = substr($param, $idx+1);
-		}
     }
     
     public function routeout($controller, $method, $get = array(), $post = array()) {
